@@ -1,20 +1,28 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include <thread>
 
-int main()
+void thread_func(sf::RenderWindow *argum)
 {
-    sf::Window App(sf::VideoMode(800, 600), "Hello, SFML");
-
-    while(App.isOpen())
+    sf::RenderWindow *App = argum;
+    while(App->isOpen())
     {
         sf::Event Event;
-        while(App.pollEvent(Event))
+        while(App->pollEvent(Event))
         {
             if (Event.type == sf::Event::Closed)
             {
-                App.close();
+                App->close();
             }
-            App.display();
+            App->display();
         }
     }
+}
+
+int main()
+{
+    sf::RenderWindow App(sf::VideoMode(800, 600), "Hello, SFML");
+    App.setActive(false);
+    std::thread t(thread_func, &App);
+    t.join();
 }
